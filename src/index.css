@@ -1,0 +1,657 @@
+@import "tailwindcss";
+
+/* ========================================
+   Design System — Sunny Chaudhary Portfolio
+   ======================================== */
+
+@theme {
+  --color-beige: #F5F0E8;
+  --color-beige-mid: #EDE4D0;
+  --color-beige-dark: #D4A574;
+  --color-accent: #D4A574;
+  --color-brown: #8B7355;
+  --color-brown-text: #5C4A35;
+  --color-espresso: #2C1810;
+  --color-footer-bg: #160a05;
+
+  --font-anton: 'Anton', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+}
+
+/* ========================================
+   Base / Reset
+   ======================================== */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-inter);
+  background-color: var(--color-beige);
+  color: var(--color-espresso);
+  overflow-x: hidden;
+}
+
+/* Text selection */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-espresso);
+}
+
+::-moz-selection {
+  background-color: var(--color-accent);
+  color: var(--color-espresso);
+}
+
+/* ========================================
+   Typography Helpers
+   ======================================== */
+
+.font-anton {
+  font-family: var(--font-anton);
+}
+
+.font-inter {
+  font-family: var(--font-inter);
+}
+
+/* ========================================
+   Scroll Indicator Animation
+   ======================================== */
+
+@keyframes scrollDot {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(32px);
+    opacity: 0;
+  }
+}
+
+.scroll-dot {
+  animation: scrollDot 2s ease-in-out infinite;
+}
+
+/* ========================================
+   Reduced Motion
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .scroll-dot {
+    animation: none;
+  }
+}
+
+/* ========================================
+   Hero Section
+   ======================================== */
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(160deg, #c49b6a 0%, #2c1810 100%);
+}
+
+/* ---- Background Text (behind video) ---- */
+.hero-bg-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  will-change: transform, opacity;
+  user-select: none;
+  mix-blend-mode: overlay;
+}
+
+.hero-bg-text-line {
+  font-family: var(--font-anton);
+  font-size: clamp(60px, 15vw, 200px);
+  text-transform: uppercase;
+  color: rgba(245, 240, 232, 0.07);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  text-shadow: 0 0 80px rgba(212, 165, 116, 0.06);
+}
+
+.hero-video-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
+  /* Scale up to push watermark out of visible area */
+  transform: scale(1.12);
+  transform-origin: center 35%;
+}
+
+@media (min-width: 768px) {
+  .hero-video {
+    object-position: center center;
+    transform-origin: center 40%;
+  }
+}
+
+/* Extra overlay specifically to mask bottom-right watermark area */
+.hero-watermark-mask {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50%;
+  height: 40%;
+  background: radial-gradient(ellipse at 100% 100%, rgba(20, 10, 5, 0.9) 0%, rgba(20, 10, 5, 0.5) 30%, transparent 70%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-overlay-dark {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 10, 5, 0.52);
+  z-index: 1;
+  will-change: opacity;
+}
+
+.hero-overlay-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(20, 10, 5, 0.75) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-overlay-bottom {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, #F5F0E8 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 0 24px;
+}
+
+/* ========================================
+   Navigation
+   ======================================== */
+
+.nav-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 300ms ease;
+}
+
+.nav-logo {
+  font-family: var(--font-inter);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.nav-links {
+  display: none;
+  gap: 32px;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+  }
+}
+
+.nav-link {
+  font-family: var(--font-inter);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+  transition: opacity 200ms ease;
+}
+
+.nav-link:hover {
+  opacity: 0.6;
+}
+
+.nav-hire {
+  font-family: var(--font-inter);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  padding: 8px 20px;
+  border-radius: 99px;
+  border: 1.5px solid currentColor;
+  transition: all 250ms ease;
+  cursor: pointer;
+  background: transparent;
+}
+
+/* ========================================
+   Mobile Menu
+   ======================================== */
+
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(44, 24, 16, 0.97);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.mobile-menu-link {
+  font-family: var(--font-anton);
+  font-size: 40px;
+  color: #F5F0E8;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 200ms ease;
+}
+
+.mobile-menu-link:hover {
+  color: var(--color-accent);
+}
+
+/* ========================================
+   Hamburger
+   ======================================== */
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 101;
+}
+
+@media (min-width: 768px) {
+  .hamburger {
+    display: none;
+  }
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  transition: all 300ms ease;
+}
+
+/* ========================================
+   About Section
+   ======================================== */
+
+.about-section {
+  background-color: var(--color-beige);
+  padding: 80px 0;
+}
+
+@media (min-width: 768px) {
+  .about-section {
+    padding: 120px 0;
+  }
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 768px) {
+  .about-grid {
+    grid-template-columns: 45fr 55fr;
+    gap: 80px;
+    padding: 0 40px;
+  }
+}
+
+.about-portrait-container {
+  position: relative;
+  max-width: 420px;
+  will-change: transform;
+}
+
+.about-portrait {
+  width: 100%;
+  border-radius: 4px;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  filter: brightness(0.95) sepia(0.08);
+  display: block;
+}
+
+.about-portrait-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  opacity: 0.12;
+  mix-blend-mode: multiply;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.social-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--color-accent);
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-family: var(--font-inter);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--color-brown);
+  text-decoration: none;
+  transition: all 200ms ease;
+  letter-spacing: 0.05em;
+}
+
+.social-pill:hover {
+  background: var(--color-accent);
+  color: var(--color-espresso);
+}
+
+/* ========================================
+   Services Section
+   ======================================== */
+
+.services-section {
+  background-color: var(--color-espresso);
+  padding: 80px 0;
+}
+
+@media (min-width: 768px) {
+  .services-section {
+    padding: 120px 0;
+  }
+}
+
+.service-card {
+  background: rgba(245, 240, 232, 0.04);
+  border: 0.5px solid rgba(212, 165, 116, 0.25);
+  border-radius: 8px;
+  padding: 36px 28px;
+  transition: border-color 300ms ease, transform 300ms ease;
+}
+
+.service-card:hover {
+  border-color: rgba(212, 165, 116, 0.7);
+  transform: translateY(-6px);
+}
+
+/* ========================================
+   Platforms Strip — Infinite Marquee
+   ======================================== */
+
+.platforms-strip {
+  background-color: var(--color-beige-mid);
+  padding: 32px 0;
+  position: relative;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  text-decoration: none;
+  transition: opacity 200ms ease;
+  flex-shrink: 0;
+}
+
+.marquee-item:hover {
+  opacity: 0.7;
+}
+
+.marquee-separator {
+  color: var(--color-accent);
+  font-size: 12px;
+}
+
+.marquee-name {
+  font-family: var(--font-inter);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--color-espresso);
+}
+
+.marquee-handle {
+  font-family: var(--font-inter);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--color-brown);
+}
+
+/* ========================================
+   Contact Section
+   ======================================== */
+
+.contact-section {
+  background-color: var(--color-espresso);
+  padding: 80px 0;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .contact-section {
+    padding: 140px 0;
+  }
+}
+
+.contact-cta {
+  display: inline-block;
+  font-family: var(--font-anton);
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--color-accent);
+  color: var(--color-espresso);
+  padding: 20px 56px;
+  border-radius: 99px;
+  text-decoration: none;
+  transition: all 280ms ease;
+  border: none;
+  cursor: pointer;
+}
+
+.contact-cta:hover {
+  background: #F5F0E8;
+  transform: scale(1.03);
+}
+
+/* ========================================
+   Footer
+   ======================================== */
+
+.footer-section {
+  background-color: var(--color-footer-bg);
+  padding: 28px 40px;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* ========================================
+   Focus styles for accessibility
+   ======================================== */
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ========================================
+   Smooth link transitions
+   ======================================== */
+
+a {
+  transition: color 200ms ease;
+}
+
+/* ========================================
+   Scroll Progress Bar
+   ======================================== */
+
+.scroll-progress-track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 200;
+  background: transparent;
+  pointer-events: none;
+}
+
+.scroll-progress-bar {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent), #e6c69a);
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
+}
+
+/* ========================================
+   WhatsApp Floating Button
+   ======================================== */
+
+.whatsapp-fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  z-index: 999;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: pulse-whatsapp 2s infinite;
+}
+
+.whatsapp-fab:hover {
+  transform: scale(1.1) translateY(-4px);
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.6);
+  animation: none;
+}
+
+@keyframes pulse-whatsapp {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+@media (min-width: 768px) {
+  .whatsapp-fab {
+    bottom: 32px;
+    right: 32px;
+    width: 56px;
+    height: 56px;
+  }
+}
