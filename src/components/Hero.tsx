@@ -105,6 +105,12 @@ export default function Hero() {
           poster="/assets/sunny-portrait.png"
           aria-hidden="true"
           className="hero-video"
+          onEnded={(e) => {
+            // Fallback for mobile browsers that fail to loop natively
+            const video = e.target as HTMLVideoElement;
+            video.currentTime = 0;
+            video.play().catch(err => console.log('Video play error:', err));
+          }}
         >
           <source
             src={isMobile ? '/assets/sunny-hero-9x16.mp4' : '/assets/sunny-hero-16x9.mp4'}
